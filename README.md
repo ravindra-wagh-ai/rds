@@ -11,7 +11,7 @@ Objective of building this service is to deploy-and-forget. A modern backend sta
 
 
 ### Configuration
-Change the configuration to connect database in .env file
+Change the configuration to connect database using .env file, create .env file in the root folder
 <table>
   <thead>
     <tr>
