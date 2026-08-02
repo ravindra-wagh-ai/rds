@@ -34,59 +34,16 @@ Change the configuration to connect database in .env file
     </tr>
     <tr>
       <td>
-        PG_DB_HOST
+        DATABASE_URL
       </td>
       <td>
-        127.0.0.1
+        postgres://postgres:<password>@localhost:5432/dbname
       </td>
       <td>
         Database host can be changed
       </td>
     </tr>
-    <tr>
-      <td>
-        PG_DB_PORT
-      </td>
-      <td>
-        5432
-      </td>
-      <td>
-        Database port can be changed
-      </td>
-    </tr>
-    <tr>
-      <td>
-        PG_DB_USER
-      </td>
-      <td>
-        postgres
-      </td>
-      <td>
-        Database Username can be changed
-      </td>
-    </tr>
-    <tr>
-      <td>
-        PG_DB_PASS
-      </td>
-      <td>
-        <strike>postgres123</strike>
-      </td>
-      <td>
-        Database Password can be changed
-      </td>
-    </tr>
-    <tr>
-      <td>
-        PG_DB_NAME
-      </td>
-      <td>
-        postgres
-      </td>
-      <td>
-        Database Name can be changed
-      </td>
-    </tr>
+    
   </tbody>
 </table>
 
