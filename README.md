@@ -40,7 +40,7 @@ Change the configuration to connect database in .env file
         postgres://postgres:{your_password}@localhost:5432/dbname
       </td>
       <td>
-        Database host can be changed
+        Database url can be changed
       </td>
     </tr>
     
