@@ -26,3 +26,5 @@ target
 /target
 
 .env
+deploy.sh
+redeploy.sh
