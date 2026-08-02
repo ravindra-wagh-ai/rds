@@ -43,7 +43,6 @@ Change the configuration to connect database in .env file
         Database url can be changed
       </td>
     </tr>
-    
   </tbody>
 </table>
 
