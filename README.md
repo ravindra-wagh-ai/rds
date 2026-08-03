@@ -60,10 +60,10 @@ Change the configuration to connect database using .env file, create .env file i
   <li>sum</li> -->
 </ol>
 
-<!-- ### Mutation
+### Mutation
 <ol>
   <li>insert</li>
   <li>update</li>
   <li>delete</li>
-  <li>simple - database transaction</li>
-</ol> -->
+  <!-- <li>simple - database transaction</li> -->
+</ol>

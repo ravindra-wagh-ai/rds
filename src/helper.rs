@@ -129,16 +129,15 @@ impl Helper {
         Some(list)
     }
 
-    /*  pub async fn _write(&self, mut builder: QueryBuilder<Postgres>) -> Option<Vec<PgRow>> {
+    pub async fn _write(&self, mut builder: QueryBuilder<Postgres>) -> Option<Vec<HashMap<String, Value>>> {
         let pool = self.initialize().await.unwrap();
-        //let mut sql = args.build();
+        // For write operations we execute the query. execute() returns a PgQueryResult
+        // which does not contain rows to map. Return an empty list on success.
         let query = builder.build();
-        query.execute(&pool).await.ok().map(|result| {
-            // Return an empty vector since we don't have rows to return
-            Vec::new()
-        })
+        let _res = query.execute(&pool).await.ok()?;
+        Some(Vec::new())
     }
-     */
+    
     /* pub async fn convert(&self, data: Option<Vec<PgRow>>) -> Option<Vec<HashMap<String,Value>>> {
         let list: Vec<HashMap<String,Value>> = Vec::new();
         Some(list);

@@ -9,7 +9,7 @@ mod helper;
 
 
 mod query;
-pub type AppSchema = Schema<query::QueryRoot, EmptyMutation, EmptySubscription>;
+pub type AppSchema = Schema<query::QueryRoot, query::Mutation, EmptySubscription>;
 
 async fn handler(
     State(schema): State<AppSchema>,
@@ -31,7 +31,7 @@ async fn main() {
     dotenv().ok();
     let port = env::var("PORT").expect("3000");
     println!("Starting server on port: {}", port);
-    let schema = Schema::build(query::QueryRoot, EmptyMutation, EmptySubscription).finish();
+    let schema = Schema::build(query::QueryRoot, query::Mutation, EmptySubscription).finish();
     let app = Router::new()
         .route(
             "/",

@@ -97,28 +97,7 @@ impl Select {
             }
             None => {}
         }
-        /* if let Some(criteria) = &self.criteria {
-            if criteria.iter().len() > 0 {
-                builder.push(String::from(" WHERE "));
-                for item in criteria {
-                    if let Some(v) = &item.lop {
-                        builder.push(format!(" {} ", v.as_str().to_string()));
-                    }
-                builder.push(format!("{}.{}", item.table, item.column));
-                builder.push(format!(" {} ", item.cop.as_str().to_string()));
-
-                if let serde_json::Value::Number(v) = &item.value {
-                    builder.push_bind(v.as_i64().unwrap());
-                } else if let serde_json::Value::String(v) = &item.value {
-                    builder.push_bind(v.to_string());
-                }
-                /*
-                    builder.push(" AND bio LIKE CONCAT('%', ");
-                    builder.push_bind(user_input);
-                    builder.push(", '%')");
-                 */
-            }
-        } */
+        
 
         match &self.offset {
             Some(v) => {

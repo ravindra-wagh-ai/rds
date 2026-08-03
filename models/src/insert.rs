@@ -8,8 +8,6 @@ pub struct Insert {
     pub table: String,
     pub columns: Vec<String>,
     pub values: Vec<Value>,
-    pub offset: Option<u64>,
-    pub limit: Option<u64>,
 }
 
 impl Insert {
@@ -17,10 +15,13 @@ impl Insert {
         let mut builder: QueryBuilder<Postgres> = QueryBuilder::new("INSERT INTO ");
         builder.push(self.table.to_string());
         builder.push(" (");
-       //builder.push_comma_separated(&self.columns);
+        //builder.push_comma_separated(&self.columns);
         builder.push(") VALUES (");
-        //builder.push_comma_separated(&self.values);
+        builder.push(&self.columns.join(", "));
         builder.push(")");
+        for value in &self.values {
+            builder.push_bind(value);
+        }
         builder
     }
 }
