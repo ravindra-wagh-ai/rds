@@ -34,41 +34,6 @@ impl Helper {
 
             // 2. Safely match based on database type naming
             let type_name = column.type_info().name();
-            /* let json_val = match type_name {
-                "INT2" | "SMALLINT" | "INT4" | "INT" | "INTEGER" => {
-                    let v: i32 = row.get(name);
-                    Value::Number(v.into())
-                }
-                "INT8" | "BIGINT" => {
-                    let v: i64 = row.get(name);
-                    Value::Number(v.into())
-                }
-                "FLOAT4" | "REAL" => {
-                    let v: f32 = row.get(name);
-                    Value::Number(v.into())
-                }
-                "FLOAT8" | "DOUBLE PRECISION" => {
-                    let v: f64 = row.get(name);
-                    Value::Number(v.into())
-                }
-                "BOOL" | "BOOLEAN" => {
-                    let v: bool = row.get(name);
-                    Value::Bool(v)
-                }
-                "VARCHAR" | "CHAR" | "TEXT" | "NAME" => {
-                    let v: String = row.get(name);
-                    Value::String(v)
-                }
-                "JSON" | "JSONB" => {
-                    let v: Value = row.get(name);
-                    v
-                }
-                _ => {
-                    // Fallback to text representation for unmapped types (UUIDs, Dates, Timestamps)
-                    let v: Result<String, _> = row.try_get(name);
-                    Value::String(v.unwrap_or_else(|_| "Unsupported type mapping".to_string()))
-                }
-            }; */
             let json_val = match type_name {
                  "INT2" | "SMALLINT" => {
                     let v: i16 = row.get(name);
