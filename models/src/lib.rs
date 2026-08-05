@@ -7,11 +7,19 @@ pub mod insert;
 pub mod join;
 pub mod select;
 pub mod count;
+pub mod min;
+pub mod max;
+pub mod avg;
+pub mod sum;
 pub mod table;
 pub mod update;
 
 
 pub use column::Column;
+pub use min::Min;
+pub use max::Max;
+pub use avg::Avg;
+pub use sum::Sum;
 pub use criteria::Criteria;
 pub use enums::Cop;
 pub use enums::Lop;

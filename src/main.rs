@@ -1,12 +1,15 @@
-use std::env;
-use dotenvy::dotenv;
 use async_graphql::{http::GraphiQLSource, *};
 use async_graphql_axum::*;
 use axum::{
-    Router, extract::State, http::HeaderMap, response::{Html, IntoResponse},
+    Router,
+    extract::{DefaultBodyLimit, State},
+    http::HeaderMap,
+    response::{Html, IntoResponse},
 };
-mod helper;
 
+use dotenvy::dotenv;
+use std::env;
+mod helper;
 
 mod query;
 pub type AppSchema = Schema<query::QueryRoot, query::Mutation, EmptySubscription>;
@@ -31,11 +34,14 @@ async fn main() {
     dotenv().ok();
     let port = env::var("PORT").expect("3000");
     println!("Starting server on port: {}", port);
+
     let schema = Schema::build(query::QueryRoot, query::Mutation, EmptySubscription).finish();
     let app = Router::new()
         .route(
             "/",
-            axum::routing::get(playground).post(handler),
+            axum::routing::get(playground)
+                .post(handler)
+                .layer(DefaultBodyLimit::max(50 * 1024 * 1024)),
         )
         .with_state(schema);
 

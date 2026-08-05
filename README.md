@@ -48,10 +48,15 @@ Change the configuration to connect database using .env file, create .env file i
 
 ### Queries
 <ol>
+  <li>tables</li>
+  <li>columns</li>
   <li>select</li>
   <li>count</li>
- <!--  <li>tables</li>
-  <li>columns</li>
+  <li>avg</li>
+  <li>max</li>
+  <li>min</li>
+  <li>sum</li>
+ <!--  
   <li>foreignkeys</li>
   <li>distinct</li>
   <li>avg</li>
