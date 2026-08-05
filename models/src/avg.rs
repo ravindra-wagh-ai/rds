@@ -14,7 +14,7 @@ impl Avg {
     pub fn build(&self) -> QueryBuilder<Postgres> {
         let mut builder = sqlx::QueryBuilder::new("SELECT ");
 
-        builder.push(format!("AVG({}.{}) as avg", self.table, self.column));
+        builder.push(format!("AVG({}.{})::FLOAT8 as avg", self.table, self.column));
         builder.push(format!(" FROM {} ", self.table));
 
         match &self.criteria {

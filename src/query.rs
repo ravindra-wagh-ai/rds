@@ -185,6 +185,7 @@ impl QueryRoot {
             .first()
             .unwrap()
             .get("avg").unwrap().clone();
+        println!("Avg: {:?}", data);
         Ok(data)
     }
     

@@ -34,6 +34,7 @@ impl Helper {
 
             // 2. Safely match based on database type naming
             let type_name = column.type_info().name();
+            println!("Column: {}, Type: {}", name, type_name);
             let json_val = match type_name {
                  "INT2" | "SMALLINT" => {
                     let v: i16 = row.get(name);
@@ -91,6 +92,7 @@ impl Helper {
             let map = self.row_to_map(row);
             list.push(map);
         }
+        println!("Read: {:?}", list);
         Some(list)
     }
 
