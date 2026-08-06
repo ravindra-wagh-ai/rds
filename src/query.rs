@@ -194,7 +194,6 @@ pub struct Mutation;
 #[Object]
 impl Mutation {
     async fn insert(&self, _ctx: &Context<'_>, args: Insert) -> async_graphql::Result<Vec<Value>> {
-        println!("Insert: {:?}", args.build().sql().as_str());
         let helper = Helper::new();
         let data: Vec<Value> = helper
             .write(args.build())

@@ -34,16 +34,15 @@ impl Helper {
 
             // 2. Safely match based on database type naming
             let type_name = column.type_info().name();
-            println!("Column: {}, Type: {}", name, type_name);
             let json_val = match type_name {
-                 "INT2" | "SMALLINT" => {
+                "INT2" | "SMALLINT" => {
                     let v: i16 = row.get(name);
                     json!(v)
                 }
                 "INT4" | "INT" | "INTEGER" => {
                     let v: i32 = row.get(name);
                     json!(v)
-                }                
+                }
                 "INT8" | "BIGINT" => {
                     let v: i64 = row.get(name);
                     json!(v)
@@ -80,13 +79,15 @@ impl Helper {
         map
     }
 
-    pub async fn read(&self, mut builder: QueryBuilder<Postgres>) -> Option<Vec<HashMap<String, Value>>> {
-
+    pub async fn read(
+        &self,
+        mut builder: QueryBuilder<Postgres>,
+    ) -> Option<Vec<HashMap<String, Value>>> {
         let mut list: Vec<HashMap<String, Value>> = Vec::new();
 
         let pool = self.initialize().await.unwrap();
         let query = builder.build();
-        
+
         let data = query.fetch_all(&pool).await.ok();
         for row in data.as_ref().unwrap_or(&Vec::new()) {
             let map = self.row_to_map(row);
@@ -94,13 +95,15 @@ impl Helper {
         }
         Some(list)
     }
-    pub async fn write(&self, mut builder: QueryBuilder<Postgres>) -> Option<Vec<HashMap<String, Value>>> {
-
+    pub async fn write(
+        &self,
+        mut builder: QueryBuilder<Postgres>,
+    ) -> Option<Vec<HashMap<String, Value>>> {
         let mut list: Vec<HashMap<String, Value>> = Vec::new();
 
         let pool = self.initialize().await.unwrap();
         let query = builder.build();
-        
+
         let data = query.fetch_all(&pool).await.ok();
         for row in data.as_ref().unwrap_or(&Vec::new()) {
             let map = self.row_to_map(row);
@@ -117,7 +120,7 @@ impl Helper {
         let affected_rows = _res.rows_affected();
         affected_rows
     } */
-    
+
     /* pub async fn convert(&self, data: Option<Vec<PgRow>>) -> Option<Vec<HashMap<String,Value>>> {
         let list: Vec<HashMap<String,Value>> = Vec::new();
         Some(list);
