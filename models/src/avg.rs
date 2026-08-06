@@ -27,19 +27,18 @@ impl Avg {
                         }
                         builder.push(format!("{}.{}", item.table, item.column));
                         builder.push(format!(" {} ", item.cop.as_str().to_string()));
-                        println!("Value: {:?}", &item.value);
-                        builder.push_bind(&item.value.clone());
+                        
 
-                        /* if let serde_json::Value::Number(v) = &item.value {
+                        if let serde_json::Value::Number(v) = &item.value {
                             if let Some(i) = v.as_i64() {
-                                builder.push_bind(&item.value.clone());
+                                builder.push_bind(i);
                             } else if let Some(f) = v.as_f64() {
-                                builder.push_bind(&item.value.clone());
+                                builder.push_bind(f);
                             }
                             //builder.push_bind(v.as_i64().unwrap());
                         } else if let serde_json::Value::String(v) = &item.value {
                             builder.push_bind(v.to_string());
-                        } */
+                        }
                     }
                 }
             }

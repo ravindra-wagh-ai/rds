@@ -16,14 +16,24 @@ impl Update {
         let mut builder: QueryBuilder<Postgres> = QueryBuilder::new("UPDATE ");
         builder.push(self.table.to_string());
         builder.push(" SET ");
-        
-        for i in 0..self.columns.len() {
-            let col = &self.columns[i];
-            if i > 0 {
-                builder.push(", ");
-            }
+
+        for col in &self.columns {
             builder.push(format!("{} = ", col.name));
-            builder.push_bind(&col.value);
+            match &col.value {
+                Some(val) => {
+                    if let serde_json::Value::Number(v) = val {
+                        if let Some(i) = v.as_i64() {
+                            builder.push_bind(i);
+                        } else if let Some(f) = v.as_f64() {
+                            builder.push_bind(f);
+                        }
+                        //builder.push_bind(v.as_i64().unwrap());
+                    } else if let serde_json::Value::String(v) = val {
+                        builder.push_bind(v.to_string());
+                    }
+                }
+                None => {}
+            }
         }
         match &self.criteria {
             Some(v) => {
@@ -37,20 +47,22 @@ impl Update {
                         builder.push(format!(" {} ", item.cop.as_str().to_string()));
 
                         if let serde_json::Value::Number(v) = &item.value {
-                            builder.push_bind(v.as_i64().unwrap());
+                            if let Some(i) = v.as_i64() {
+                                builder.push_bind(i);
+                            } else if let Some(f) = v.as_f64() {
+                                builder.push_bind(f);
+                            }
+
+                            //builder.push_bind(v.as_i64().unwrap());
                         } else if let serde_json::Value::String(v) = &item.value {
                             builder.push_bind(v.to_string());
                         }
-                        /*
-                           builder.push(" AND bio LIKE CONCAT('%', ");
-                           builder.push_bind(user_input);
-                           builder.push(", '%')");
-                        */
                     }
                 }
             }
             None => {}
         }
+        builder.push(" RETURNING *");
         builder
     }
 }

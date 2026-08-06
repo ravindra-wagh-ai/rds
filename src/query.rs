@@ -39,13 +39,10 @@ impl QueryRoot {
     async fn health(&self) -> &str {
         "I'm healthy"
     }
-    async fn tables(
-        &self,
-        _ctx: &Context<'_>,
-    ) -> async_graphql::Result<Vec<Value>> {
-
-        let query = "SELECT table_name as name FROM information_schema.tables WHERE table_schema='public'";
-        let builder:QueryBuilder<Postgres> = QueryBuilder::new(query);
+    async fn tables(&self, _ctx: &Context<'_>) -> async_graphql::Result<Vec<Value>> {
+        let query =
+            "SELECT table_name as name FROM information_schema.tables WHERE table_schema='public'";
+        let builder: QueryBuilder<Postgres> = QueryBuilder::new(query);
 
         let helper = Helper::new();
         let data: Vec<Value> = helper
@@ -65,13 +62,11 @@ impl QueryRoot {
     async fn columns(
         &self,
         _ctx: &Context<'_>,
-         args: Option<Vec<String>>,
+        args: Option<Vec<String>>,
     ) -> async_graphql::Result<Vec<Value>> {
-
-
         let query = "SELECT table_name as table, column_name as name, data_type as type, character_octet_length length, is_nullable nullable FROM information_schema.columns WHERE table_schema ='public'";
 
-        let mut builder:QueryBuilder<Postgres> = QueryBuilder::new(query);
+        let mut builder: QueryBuilder<Postgres> = QueryBuilder::new(query);
 
         match args {
             Some(ref tables) if !tables.is_empty() => {
@@ -86,9 +81,9 @@ impl QueryRoot {
             }
             _ => {}
         }
-        
+
         //println!("SQL: {}", builder.build().sql().as_str());
-        
+
         let helper = Helper::new();
         let data: Vec<Value> = helper
             .read(builder)
@@ -104,11 +99,7 @@ impl QueryRoot {
         Ok(data)
     }
 
-    async fn select(
-        &self,
-        _ctx: &Context<'_>,
-        args: Select,
-    ) -> async_graphql::Result<Vec<Value>> {
+    async fn select(&self, _ctx: &Context<'_>, args: Select) -> async_graphql::Result<Vec<Value>> {
         let sql = args.build().sql();
         println!("SQL: {}", sql.as_str());
         let helper = Helper::new();
@@ -148,7 +139,9 @@ impl QueryRoot {
             .unwrap_or_default()
             .first()
             .unwrap()
-            .get("min").unwrap().clone();
+            .get("min")
+            .unwrap()
+            .clone();
         Ok(data)
     }
 
@@ -160,7 +153,9 @@ impl QueryRoot {
             .unwrap_or_default()
             .first()
             .unwrap()
-            .get("max").unwrap().clone();
+            .get("max")
+            .unwrap()
+            .clone();
         Ok(data)
     }
 
@@ -172,11 +167,13 @@ impl QueryRoot {
             .unwrap_or_default()
             .first()
             .unwrap()
-            .get("sum").unwrap().clone();
+            .get("sum")
+            .unwrap()
+            .clone();
         Ok(data)
     }
 
-     async fn avg(&self, _ctx: &Context<'_>, args: Avg) -> async_graphql::Result<Value> {
+    async fn avg(&self, _ctx: &Context<'_>, args: Avg) -> async_graphql::Result<Value> {
         let helper = Helper::new();
         let data = helper
             .read(args.build())
@@ -184,60 +181,64 @@ impl QueryRoot {
             .unwrap_or_default()
             .first()
             .unwrap()
-            .get("avg").unwrap().clone();
-        println!("Avg: {:?}", data);
+            .get("avg")
+            .unwrap()
+            .clone();
+        //println!("Avg: {:?}", data);
         Ok(data)
     }
-    
 }
-
 
 pub struct Mutation;
 
 #[Object]
 impl Mutation {
-   async fn insert(&self, _ctx: &Context<'_>, args: Insert) -> async_graphql::Result<u64> {
+    async fn insert(&self, _ctx: &Context<'_>, args: Insert) -> async_graphql::Result<Vec<Value>> {
+        println!("Insert: {:?}", args.build().sql().as_str());
         let helper = Helper::new();
-        let data = helper
-            .read(args.build())
+        let data: Vec<Value> = helper
+            .write(args.build())
             .await
             .unwrap_or_default()
-            .first()
-            .unwrap()
-            .get("count")
-            .unwrap()
-            .as_i64()
-            .unwrap();
-        Ok(u64::try_from(data).unwrap_or_default())
+            .into_iter()
+            .map(|row| {
+                row.into_iter()
+                    .map(|(k, v)| (k, Value::from(v)))
+                    .collect::<Value>()
+            })
+            .collect();
+        Ok(data)
     }
 
-    async fn update(&self, _ctx: &Context<'_>, args: Update) -> async_graphql::Result<u64> {
+    async fn update(&self, _ctx: &Context<'_>, args: Update) -> async_graphql::Result<Vec<Value>> {
         let helper = Helper::new();
-        let data = helper
-            .read(args.build())
+        let data: Vec<Value> = helper
+            .write(args.build())
             .await
             .unwrap_or_default()
-            .first()
-            .unwrap()
-            .get("count")
-            .unwrap()
-            .as_i64()
-            .unwrap();
-        Ok(u64::try_from(data).unwrap_or_default())
+            .into_iter()
+            .map(|row| {
+                row.into_iter()
+                    .map(|(k, v)| (k, Value::from(v)))
+                    .collect::<Value>()
+            })
+            .collect();
+        Ok(data)
     }
 
-    async fn delete(&self, _ctx: &Context<'_>, args: Delete) -> async_graphql::Result<u64> {
+    async fn delete(&self, _ctx: &Context<'_>, args: Delete) -> async_graphql::Result<Vec<Value>> {
         let helper = Helper::new();
-        let data = helper
-            .read(args.build())
+        let data: Vec<Value> = helper
+            .write(args.build())
             .await
             .unwrap_or_default()
-            .first()
-            .unwrap()
-            .get("count")
-            .unwrap()
-            .as_i64()
-            .unwrap();
-        Ok(u64::try_from(data).unwrap_or_default())
+            .into_iter()
+            .map(|row| {
+                row.into_iter()
+                    .map(|(k, v)| (k, Value::from(v)))
+                    .collect::<Value>()
+            })
+            .collect();
+        Ok(data)
     }
 }

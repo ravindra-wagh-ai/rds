@@ -85,25 +85,38 @@ impl Helper {
         let mut list: Vec<HashMap<String, Value>> = Vec::new();
 
         let pool = self.initialize().await.unwrap();
-        //let mut sql = args.build();
         let query = builder.build();
+        
         let data = query.fetch_all(&pool).await.ok();
         for row in data.as_ref().unwrap_or(&Vec::new()) {
             let map = self.row_to_map(row);
             list.push(map);
         }
-        println!("Read: {:?}", list);
         Some(list)
     }
+    pub async fn write(&self, mut builder: QueryBuilder<Postgres>) -> Option<Vec<HashMap<String, Value>>> {
 
-    pub async fn _write(&self, mut builder: QueryBuilder<Postgres>) -> Option<Vec<HashMap<String, Value>>> {
+        let mut list: Vec<HashMap<String, Value>> = Vec::new();
+
+        let pool = self.initialize().await.unwrap();
+        let query = builder.build();
+        
+        let data = query.fetch_all(&pool).await.ok();
+        for row in data.as_ref().unwrap_or(&Vec::new()) {
+            let map = self.row_to_map(row);
+            list.push(map);
+        }
+        Some(list)
+    }
+    /* pub async fn _write(&self, mut builder: QueryBuilder<Postgres>) -> u64 {
         let pool = self.initialize().await.unwrap();
         // For write operations we execute the query. execute() returns a PgQueryResult
         // which does not contain rows to map. Return an empty list on success.
         let query = builder.build();
-        let _res = query.execute(&pool).await.ok()?;
-        Some(Vec::new())
-    }
+        let _res = query.execute(&pool).await.unwrap();
+        let affected_rows = _res.rows_affected();
+        affected_rows
+    } */
     
     /* pub async fn convert(&self, data: Option<Vec<PgRow>>) -> Option<Vec<HashMap<String,Value>>> {
         let list: Vec<HashMap<String,Value>> = Vec::new();

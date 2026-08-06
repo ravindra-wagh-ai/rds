@@ -15,13 +15,23 @@ impl Insert {
         let mut builder: QueryBuilder<Postgres> = QueryBuilder::new("INSERT INTO ");
         builder.push(self.table.to_string());
         builder.push(" (");
+        builder.push(&self.columns.join(", "));
         //builder.push_comma_separated(&self.columns);
         builder.push(") VALUES (");
-        builder.push(&self.columns.join(", "));
-        builder.push(")");
+        
         for value in &self.values {
-            builder.push_bind(value);
+            if let serde_json::Value::Number(v) = &value {
+                if let Some(i) = v.as_i64() {
+                    builder.push_bind(i);
+                } else if let Some(f) = v.as_f64() {
+                    builder.push_bind(f);
+                }
+                //builder.push_bind(v.as_i64().unwrap());
+            } else if let serde_json::Value::String(v) = &value {
+                builder.push_bind(v.to_string());
+            }
         }
+        builder.push(") RETURNING *");
         builder
     }
 }
